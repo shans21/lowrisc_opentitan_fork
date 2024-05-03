@@ -335,6 +335,17 @@ module ibex_decoder #(
         endcase
       end
 
+       //////////
+      ///BLOC///
+      //////////
+
+      OPCODE_BLOC: begin
+        rf_ren_a_o         = 1'b1;
+        rf_ren_b_o         = 1'b1;
+        rf_we              = 1'b1;
+      end
+
+
       /////////
       // ALU //
       /////////
@@ -943,6 +954,13 @@ module ibex_decoder #(
         endcase
       end
 
+     OPCODE_BLOC: begin
+        alu_op_a_mux_sel_o = OP_A_REG_A;
+        alu_op_b_mux_sel_o = OP_B_REG_B;
+        alu_operator_o     = ALU_BLOC;
+        alu_multicycle_o = 1'b1;
+     end
+      
       OPCODE_OP: begin  // Register-Register ALU operation
         alu_op_a_mux_sel_o = OP_A_REG_A;
         alu_op_b_mux_sel_o = OP_B_REG_B;
