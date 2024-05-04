@@ -354,6 +354,43 @@ module ibex_alu #(
 
   end
 
+ ///////////////////
+  ///////BLOC////////
+  ///////////////////
+
+  logic        [31:0] bloc_result;
+  logic        [31:0] bloc_interim_result;
+  logic        illegal_intruction;
+  always_comb begin
+        unique case (operator_i)
+        ALU_BLOC:
+
+        for ( int unsigned i=0; i<8; i++ ) begin
+          if (operand_b_i[i+8]==0) begin
+                bloc_interim_result[i]=operand_a_i[i]
+          end
+          else begin
+                if (operand_b_i[i]==1 && operand_a_i[i]==0) begin
+                  //  operand_a_i[i]==1;
+                    bloc_interim_result[i]==1;
+                end
+                else if (operand_b_i[i]==1 && operand_a_i[i]==1) begin
+                    bloc_interim_result==32'b1;
+                end
+                else if (operand_b_i[i]==0 && operand_a_i[i]==1) begin
+                  //  operand_a_i[i]==0;
+                    bloc_interim_result[i]==0;
+                end
+                else if (operand_b_i[i]==0 && operand_a_i[i]==0) begin
+                    bloc_interim_result==32'b1;
+                end
+          end
+        assign bloc_result= bloc_interim_result;
+  end
+
+
+
+  
   ///////////////////
   // Bitwise Logic //
   ///////////////////
@@ -1339,6 +1376,9 @@ module ibex_alu #(
 
       // Shuffle Operations (RV32B)
       ALU_SHFL, ALU_UNSHFL: result_o = shuffle_result;
+
+      //BLOC
+      ALU_BLOC: result_o = bloc_result;
 
       // Crossbar Permutation Operations (RV32B)
       ALU_XPERM_N, ALU_XPERM_B, ALU_XPERM_H: result_o = xperm_result;
